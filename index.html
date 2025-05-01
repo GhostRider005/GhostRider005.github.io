@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rose et Tresor</title>
+  <title>Rose et Trésor</title>
   <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -14,6 +14,12 @@
       background-size: cover;
       color: #222;
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.night-mode {
+      background-color: #121212;
+      color: #ddd;
     }
 
     header {
@@ -23,19 +29,49 @@
       animation: fadeIn 1.5s ease-out;
     }
 
+    header.night-mode {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     header h1 {
       font-family: 'Viaoda Libre', serif;
       font-size: 3rem;
-      color: #c71585;
+      color: #0c0b0c;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 0.5rem;
     }
+    header {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2rem 1rem;
+  animation: fadeIn 1.5s ease-out;
+}
 
-    header h1 i {
-      color: #c71585;
-    }
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+h1 {
+  font-family: 'Viaoda Libre', serif;
+  font-size: 3rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 
     header p {
       font-size: 1.3rem;
@@ -52,6 +88,10 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
 
+    .section.night-mode {
+      background: rgba(40, 40, 40, 0.9);
+    }
+
     .dress-code-card {
       display: flex;
       justify-content: center;
@@ -65,7 +105,7 @@
 
     .icon {
       font-size: 2.5rem;
-      color: #c71585;
+      color: #222;
     }
 
     .swatch {
@@ -76,8 +116,8 @@
       border: 2px solid #ccc;
     }
 
-    .rose { background-color: #eba8c4; }
-    .blanc { background-color: #ffffff; }
+    .rose { background-color: #ca2C92; }
+    .blanc { background-color: #E0B0FF; }
 
     .map iframe {
       width: 100%;
@@ -134,10 +174,9 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     }
 
-    .countdown h3 {
-      font-size: 2rem;
-      color: #c71585;
-      margin-bottom: 1rem;
+    .countdown.night-mode {
+      background: #333;
+      color: white;
     }
 
     .reactions {
@@ -162,6 +201,42 @@
       background: #fce4ec;
     }
 
+    footer.night-mode {
+      background: #2c2c2c;
+      color: #fff;
+    }
+
+    #messages {
+      margin-top: 1rem;
+      max-height: 200px;
+      overflow-y: auto;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .toggle-buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-buttons button {
+      background-color: #fff;
+      border: none;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .toggle-buttons button:hover {
+      background-color: #f8b6d2;
+    }
+
     @keyframes fadeIn {
       0% { opacity: 0; }
       100% { opacity: 1; }
@@ -169,14 +244,19 @@
   </style>
 </head>
 <body>
+ 
   <header>
+    <img src="wedding-arch_11211519.png" alt="Logo des mariés 1" class="logo"> <!-- Remplace par ton logo -->
     <h1><i class="fas fa-ring"></i> Rose et Trésor</h1>
-    <p>Venez assister à notre mariage civil</p>
   </header>
+  <div class="toggle-buttons">
+    <button id="toggleNightMode"><i class="fas fa-moon"></i></button>
+    <button id="translateButton"><i class="fas fa-language"></i></button>
+  </div>
 
   <section class="section">
     <h2>Détails de l'événement</h2>
-    <p><strong>Date :</strong> 12 juin 2025 à 10h00</p>
+    <p><strong>Date :</strong> 13 juillet 2025 à 10h00</p>
     <p><strong>Lieu :</strong> Salle de fête SNCC</p>
     <div class="map">
       <iframe src="https://www.google.com/maps?q=Salle+de+f%C3%AAte+SNCC&output=embed"></iframe>
@@ -184,23 +264,23 @@
   </section>
 
   <section class="section dresscode-container">
-    <h2>🎨 Dress Code (Obligatoire)</h2>
+    <h2>🎨 Dress Code mariage civil (Obligatoire)</h2>
     <div class="dress-code-card">
       <div class="dress-item">
         <i class="fas fa-tshirt icon"></i>
         <div class="swatch rose"></div>
-        <span>Rose</span>
+        <span>Rose fushia</span>
       </div>
       <div class="dress-item">
         <i class="fas fa-user-tie icon"></i>
         <div class="swatch blanc"></div>
-        <span>Blanc</span>
+        <span>Mauve pale</span>
       </div>
     </div>
   </section>
 
   <section class="section rsvp-section">
-    <h2>Confirmez votre presence</h2>
+    <h2>Confirmez votre présence</h2>
     <form action="https://formspree.io/f/mzzrdnpq" method="POST">
       <input type="text" name="nom" required placeholder="Votre nom">
       <select name="presence" required>
@@ -236,36 +316,121 @@
 
   <section class="section">
     <h2>Livre d'or</h2>
-    <textarea rows="4" style="width:100%;border-radius:6px;padding:1rem;" placeholder="Laissez-nous un mot doux..."></textarea>
-    <div class="reactions">
-      <span>❤️</span><span>⭐️</span><span>✨</span><span>🥂</span>
-    </div>
+    <input type="text" id="nameInput" placeholder="Votre nom" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+    <textarea id="messageInput" rows="4" style="width:100%;border-radius:6px;padding:1rem;" placeholder="Laissez un message..."></textarea>
+    <button onclick="addMessage()" style="margin-top:10px;padding:10px 20px;background:#c71585;color:#fff;border:none;border-radius:8px;">Envoyer</button>
+    <button onclick="openModal()" style="margin-top:10px;padding:10px 20px;background:#333;color:#fff;border:none;border-radius:8px;">Voir les messages de vœux</button>
   </section>
+  
+  <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:10px; padding:20px; max-width:600px; width:90%; max-height:80%; overflow-y:auto; position:relative;">
+      <button onclick="closeModal()" style="position:absolute; top:10px; right:15px; font-size:18px; background:none; border:none; cursor:pointer;">✖</button>
+      <h3 style="text-align:center; margin-bottom:15px;">💌 Messages de vœux</h3>
+      <div id="messagesList"></div>
+    </div>
+  </div>
+  
 
   <footer>
-    Merci de faire partie de ce moment spécial. Contact : <a href="https://wa.me/243996801119">WhatsApp</a>
+    Merci de faire partie de ce moment spécial.
+    Pour plus d'information veuillez cliquer sur ce lien// Contact : <a href="https://wa.me/243828447154">WhatsApp</a>
   </footer>
 
   <script>
-    // Countdown Script
-    const eventDate = new Date("June 12, 2025 10:00:00").getTime();
+    const eventDate = new Date("July 13, 2025 10:00:00").getTime();
     const countdown = document.getElementById("timer");
-
+  
     setInterval(() => {
       const now = new Date().getTime();
       const distance = eventDate - now;
-
+  
+      if (distance < 0) {
+        countdown.innerHTML = "C'est le grand jour !";
+        return;
+      }
+  
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
+  
       countdown.innerHTML = `${days}j ${hours}h ${minutes}m ${seconds}s`;
-
-      if (distance < 0) {
-        countdown.innerHTML = "C'est le grand jour !";
-      }
     }, 1000);
+  
+    const badWords = ["fuck", "shit", "merde", "putain", "connard", "salope", "ntm", "fdp", "enculé", "nique", "bitch"];
+
+    function addMessage() {
+      const name = document.getElementById("nameInput").value.trim();
+      const message = document.getElementById("messageInput").value.trim();
+
+      if (!name || !message) {
+        alert("Remplis ton nom et ton message.");
+        return;
+      }
+
+      const messageContainer = document.createElement("div");
+      const badWordFound = badWords.some(word => message.toLowerCase().includes(word));
+      
+      if (badWordFound) {
+        alert("Ton message contient des mots inappropriés. Change-le !");
+        return;
+      }
+
+      messageContainer.textContent = `${name}: ${message}`;
+      document.getElementById("messagesList").appendChild(messageContainer);
+
+      document.getElementById("nameInput").value = "";
+      document.getElementById("messageInput").value = "";
+    }
+
+    function openModal() {
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    // Night Mode Toggle
+    const toggleNightMode = document.getElementById("toggleNightMode");
+    toggleNightMode.addEventListener("click", () => {
+      document.body.classList.toggle("night-mode");
+      document.querySelector("header").classList.toggle("night-mode");
+      document.querySelector(".section").classList.toggle("night-mode");
+      document.querySelector(".countdown").classList.toggle("night-mode");
+      document.querySelector("footer").classList.toggle("night-mode");
+    });
+
+    // Translation Button
+    const translateButton = document.getElementById("translateButton");
+    translateButton.addEventListener("click", () => {
+      const currentLang = document.documentElement.lang;
+      if (currentLang === "fr") {
+        document.documentElement.lang = "en";
+        translateToEnglish();
+      } else {
+        document.documentElement.lang = "fr";
+        translateToFrench();
+      }
+    });
+
+    function translateToEnglish() {
+      document.querySelector("header h1").innerText = "Rose and Treasure";
+      document.querySelector("header p").innerText = "Join us for our civil wedding!";
+      document.querySelector("h2").innerText = "Event Details";
+      document.querySelector(".rsvp-section h2").innerText = "RSVP";
+      document.querySelector(".countdown h3").innerText = "Countdown to the big day";
+      document.querySelector(".gallery h2").innerText = "Gallery";
+    }
+
+    function translateToFrench() {
+      document.querySelector("header h1").innerText = "Rose et Trésor";
+      document.querySelector("header p").innerText = "Venez assister à notre mariage civil";
+      document.querySelector("h2").innerText = "Détails de l'événement";
+      document.querySelector(".rsvp-section h2").innerText = "Confirmez votre présence";
+      document.querySelector(".countdown h3").innerText = "Compte à rebours de l'heureux jour";
+      document.querySelector(".gallery h2").innerText = "Galerie";
+    }
   </script>
 </body>
 </html>
