@@ -5,16 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rose et Trésor</title>
   <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Open Sans', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       background: url("back.jpg") no-repeat center center;
       background-size: cover;
       color: #222;
       overflow-x: hidden;
       transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body.night-mode {
@@ -24,8 +29,7 @@
 
     header {
       background: rgba(255, 255, 255, 0.85);
-      text-align: center;
-      padding: 3rem 1rem;
+      padding: 2rem 1rem;
       animation: fadeIn 1.5s ease-out;
     }
 
@@ -33,45 +37,29 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    header h1 {
-      font-family: 'Viaoda Libre', serif;
-      font-size: 3rem;
-      color: #0c0b0c;
+    .header-container {
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 2rem;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      font-family: 'Viaoda Libre', serif;
+      font-size: 3rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
       gap: 0.5rem;
     }
-    header {
-  background: rgba(255, 255, 255, 0.85);
-  padding: 2rem 1rem;
-  animation: fadeIn 1.5s ease-out;
-}
-
-.header-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-}
-
-.logo {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(0,0,0,0.2);
-}
-
-h1 {
-  font-family: 'Viaoda Libre', serif;
-  font-size: 3rem;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 
     header p {
       font-size: 1.3rem;
@@ -86,6 +74,14 @@ h1 {
       border-radius: 20px;
       margin-bottom: 2rem;
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .section.night-mode {
@@ -164,6 +160,11 @@ h1 {
       width: 100%;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.03);
     }
 
     .countdown {
@@ -206,16 +207,6 @@ h1 {
       color: #fff;
     }
 
-    #messages {
-      margin-top: 1rem;
-      max-height: 200px;
-      overflow-y: auto;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-    }
-
     .toggle-buttons {
       position: fixed;
       top: 20px;
@@ -231,24 +222,286 @@ h1 {
       border-radius: 50%;
       cursor: pointer;
       transition: 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
     .toggle-buttons button:hover {
       background-color: #f8b6d2;
+      transform: scale(1.1);
+    }
+
+    /* Styles pour le livre d'or */
+    .guest-book-container {
+      position: relative;
+      background: linear-gradient(135deg, rgba(255, 245, 250, 0.9) 0%, rgba(255, 230, 240, 0.9) 100%);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(199, 21, 133, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(199, 21, 133, 0.2);
+    }
+
+    .guest-book-container.night-mode {
+      background: linear-gradient(135deg, rgba(40, 30, 40, 0.9) 0%, rgba(60, 40, 60, 0.9) 100%);
+      border: 1px solid rgba(255, 182, 193, 0.2);
+    }
+
+    .guest-input, .guest-textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      border: 2px solid #f8b6d2;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .guest-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .guest-input:focus, .guest-textarea:focus {
+      outline: none;
+      border-color: #c71585;
+      box-shadow: 0 0 0 4px rgba(199, 21, 133, 0.2);
+    }
+
+    .guest-submit-btn, .guest-view-btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 10px;
+    }
+
+    .guest-submit-btn {
+      background: linear-gradient(45deg, #c71585, #e84393);
+      color: white;
+    }
+
+    .guest-view-btn {
+      background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+      color: white;
+    }
+
+    .guest-submit-btn:hover {
+      background: linear-gradient(45deg, #e84393, #c71585);
+      transform: translateY(-2px);
+    }
+
+    .guest-view-btn:hover {
+      background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+      transform: translateY(-2px);
+    }
+
+    /* Modal amélioré */
+    .guest-book-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(199, 21, 133, 0.3);
+    }
+
+    .night-mode .modal-content {
+      background: #2a2a2a;
+      color: #f0f0f0;
+      border-color: rgba(255, 182, 193, 0.3);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #c71585;
+      transition: transform 0.3s ease;
+    }
+
+    .modal-close-btn:hover {
+      transform: rotate(90deg);
+    }
+
+    .modal-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #c71585;
+      font-size: 1.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .night-mode .modal-title {
+      color: #ffb6c1;
+    }
+
+    .messages-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .message-card {
+      background: rgba(255, 245, 250, 0.9);
+      border-radius: 15px;
+      padding: 1.2rem;
+      border-left: 4px solid #c71585;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      animation: fadeInUp 0.5s ease-out forwards;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .night-mode .message-card {
+      background: rgba(50, 40, 50, 0.9);
+      border-left-color: #ffb6c1;
+    }
+
+    .message-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(199, 21, 133, 0.1);
+    }
+
+    .message-author {
+      font-weight: bold;
+      color: #c71585;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .night-mode .message-author {
+      color: #ffb6c1;
+    }
+
+    .message-text {
+      line-height: 1.5;
+      color: #333;
+    }
+
+    .night-mode .message-text {
+      color: #e0e0e0;
+    }
+
+    .message-date {
+      font-size: 0.8rem;
+      color: #888;
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    /* Cœurs flottants */
+    .floating-hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-hearts i {
+      position: absolute;
+      color: rgba(199, 21, 133, 0.15);
+      animation: floatHeart 10s linear infinite;
+      font-size: 1.2rem;
+    }
+
+    .floating-hearts i:nth-child(1) {
+      top: 10%;
+      left: 20%;
+      animation-delay: 0s;
+    }
+
+    .floating-hearts i:nth-child(2) {
+      top: 60%;
+      left: 70%;
+      animation-delay: 3s;
+    }
+
+    .floating-hearts i:nth-child(3) {
+      top: 30%;
+      left: 50%;
+      animation-delay: 6s;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     @keyframes fadeIn {
       0% { opacity: 0; }
       100% { opacity: 1; }
     }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
- 
   <header>
-    <img src="wedding-arch_11211519.png" alt="Logo des mariés 1" class="logo"> <!-- Remplace par ton logo -->
-    <h1><i class="fas fa-ring"></i> Rose et Trésor</h1>
+    <div class="header-container">
+      <img src="wedding-arch_11211519.png" alt="Logo des mariés" class="logo">
+      <h1><i class="fas fa-ring"></i> Rose et Trésor</h1>
+    </div>
   </header>
+  
   <div class="toggle-buttons">
     <button id="toggleNightMode"><i class="fas fa-moon"></i></button>
     <button id="translateButton"><i class="fas fa-language"></i></button>
@@ -280,20 +533,24 @@ h1 {
   </section>
 
   <section class="section rsvp-section">
-    <h2>Confirmez votre présence</h2>
+    <h2>Confirme ta présence</h2>
     <form action="https://formspree.io/f/mzzrdnpq" method="POST">
-      <input type="text" name="nom" required placeholder="Votre nom">
+      <input type="text" name="nom" required placeholder="Ton nom">
+  
       <select name="presence" required>
         <option value="">Seras-tu présent(e) ?</option>
         <option value="Oui">Oui, je serai là !</option>
         <option value="Non">Non, malheureusement</option>
       </select>
-      <select name="accompagné">
+  
+      <select name="accompagné" id="accompagné" required>
         <option value="">Viens-tu accompagné(e) ?</option>
-        <option value="Oui">Oui</option>
-        <option value="Non">Non</option>
+        <option value="Oui">Oui, en couple</option>
+        <option value="Non">Non, je viens seul(e)</option>
       </select>
-      <input type="text" name="nomAccompagnant" placeholder="Nom de l'accompagnant">
+  
+      <input type="text" name="nomAccompagnant" id="nomAccompagnant" placeholder="Nom de l'accompagnant" disabled>
+  
       <button type="submit">Envoyer</button>
     </form>
   </section>
@@ -314,32 +571,63 @@ h1 {
     <div id="timer" style="font-size: 1.8rem; font-weight: bold;"></div>
   </section>
 
-  <section class="section">
-    <h2>Livre d'or</h2>
-    <input type="text" id="nameInput" placeholder="Votre nom" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-    <textarea id="messageInput" rows="4" style="width:100%;border-radius:6px;padding:1rem;" placeholder="Laissez un message..."></textarea>
-    <button onclick="addMessage()" style="margin-top:10px;padding:10px 20px;background:#c71585;color:#fff;border:none;border-radius:8px;">Envoyer</button>
-    <button onclick="openModal()" style="margin-top:10px;padding:10px 20px;background:#333;color:#fff;border:none;border-radius:8px;">Voir les messages de vœux</button>
+  <section class="section" id="guestBookSection">
+    <h2 style="text-align: center; margin-bottom: 2rem;">📖 Livre d'or</h2>
+    
+    <div class="guest-book-container">
+      <div class="guest-book-input">
+        <input type="text" id="nameInput" placeholder="Votre nom" class="guest-input">
+        <textarea id="messageInput" rows="4" class="guest-textarea" placeholder="Écrivez votre message de vœux..."></textarea>
+        <button onclick="addMessage()" class="guest-submit-btn">
+          <i class="fas fa-paper-plane"></i> Envoyer
+        </button>
+        <button onclick="openModal()" class="guest-view-btn">
+          <i class="fas fa-book-open"></i> Voir les messages
+        </button>
+      </div>
+      
+      <div class="floating-hearts">
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+      </div>
+    </div>
   </section>
-  
-  <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
-    <div style="background:white; border-radius:10px; padding:20px; max-width:600px; width:90%; max-height:80%; overflow-y:auto; position:relative;">
-      <button onclick="closeModal()" style="position:absolute; top:10px; right:15px; font-size:18px; background:none; border:none; cursor:pointer;">✖</button>
-      <h3 style="text-align:center; margin-bottom:15px;">💌 Messages de vœux</h3>
-      <div id="messagesList"></div>
+
+  <div id="modal" class="guest-book-modal">
+    <div class="modal-content">
+      <button onclick="closeModal()" class="modal-close-btn">✖</button>
+      <h3 class="modal-title">
+        <i class="fas fa-heart"></i> Messages de vœux
+      </h3>
+      <div id="messagesList" class="messages-container"></div>
     </div>
   </div>
-  
 
   <footer>
-    Merci de faire partie de ce moment spécial.
+    Merci de faire partie de ce moment spécial.<br>
     Pour plus d'information veuillez cliquer sur ce lien// Contact : <a href="https://wa.me/243828447154">WhatsApp</a>
   </footer>
 
   <script>
+    // Animation de défilement des sections
+    function checkVisibility() {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          section.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', checkVisibility);
+    window.addEventListener('load', checkVisibility);
+
+    // Compte à rebours
     const eventDate = new Date("July 13, 2025 10:00:00").getTime();
     const countdown = document.getElementById("timer");
-  
+
     setInterval(() => {
       const now = new Date().getTime();
       const distance = eventDate - now;
@@ -357,38 +645,96 @@ h1 {
       countdown.innerHTML = `${days}j ${hours}h ${minutes}m ${seconds}s`;
     }, 1000);
   
+    // Livre d'or
     const badWords = ["fuck", "shit", "merde", "putain", "connard", "salope", "ntm", "fdp", "enculé", "nique", "bitch"];
 
     function addMessage() {
-      const name = document.getElementById("nameInput").value.trim();
-      const message = document.getElementById("messageInput").value.trim();
+      const name = document.getElementById('nameInput').value.trim();
+      const message = document.getElementById('messageInput').value.trim();
 
       if (!name || !message) {
-        alert("Remplis ton nom et ton message.");
+        alert('Veuillez remplir votre nom et votre message.');
         return;
       }
 
-      const messageContainer = document.createElement("div");
-      const badWordFound = badWords.some(word => message.toLowerCase().includes(word));
-      
+      const badWordFound = badWords.some(word => 
+        message.toLowerCase().includes(word.toLowerCase()) || 
+        name.toLowerCase().includes(word.toLowerCase())
+      );
+
       if (badWordFound) {
-        alert("Ton message contient des mots inappropriés. Change-le !");
+        alert('Votre message contient des mots inappropriés. Merci de le modifier.');
         return;
       }
 
-      messageContainer.textContent = `${name}: ${message}`;
-      document.getElementById("messagesList").appendChild(messageContainer);
-
-      document.getElementById("nameInput").value = "";
-      document.getElementById("messageInput").value = "";
+      const messageCard = document.createElement('div');
+      messageCard.className = 'message-card';
+      messageCard.style.animationDelay = `${document.getElementById('messagesList').children.length * 0.1}s`;
+      
+      const authorSpan = document.createElement('div');
+      authorSpan.className = 'message-author';
+      authorSpan.innerHTML = `<i class="fas fa-user"></i> ${name}`;
+      
+      const textP = document.createElement('div');
+      textP.className = 'message-text';
+      textP.textContent = message;
+      
+      const dateSpan = document.createElement('div');
+      dateSpan.className = 'message-date';
+      dateSpan.textContent = new Date().toLocaleString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      messageCard.appendChild(authorSpan);
+      messageCard.appendChild(textP);
+      messageCard.appendChild(dateSpan);
+      
+      document.getElementById('messagesList').prepend(messageCard);
+      
+      // Animation de confirmation
+      const submitBtn = document.querySelector('.guest-submit-btn');
+      submitBtn.innerHTML = '<i class="fas fa-check"></i> Envoyé !';
+      submitBtn.style.backgroundColor = '#4CAF50';
+      
+      setTimeout(() => {
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer';
+        submitBtn.style.backgroundColor = '';
+      }, 2000);
+      
+      // Réinitialisation des champs
+      document.getElementById('nameInput').value = '';
+      document.getElementById('messageInput').value = '';
     }
 
     function openModal() {
-      document.getElementById("modal").style.display = "flex";
+      const modal = document.getElementById('modal');
+      modal.style.display = 'flex';
+      
+      // Petite animation quand le modal s'ouvre
+      const modalContent = modal.querySelector('.modal-content');
+      modalContent.style.transform = 'scale(0.9)';
+      modalContent.style.opacity = '0';
+      
+      setTimeout(() => {
+        modalContent.style.transform = 'scale(1)';
+        modalContent.style.opacity = '1';
+      }, 10);
     }
 
     function closeModal() {
-      document.getElementById("modal").style.display = "none";
+      const modal = document.getElementById('modal');
+      const modalContent = modal.querySelector('.modal-content');
+      
+      modalContent.style.transform = 'scale(0.9)';
+      modalContent.style.opacity = '0';
+      
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
     }
 
     // Night Mode Toggle
@@ -396,9 +742,12 @@ h1 {
     toggleNightMode.addEventListener("click", () => {
       document.body.classList.toggle("night-mode");
       document.querySelector("header").classList.toggle("night-mode");
-      document.querySelector(".section").classList.toggle("night-mode");
+      document.querySelectorAll(".section").forEach(section => {
+        section.classList.toggle("night-mode");
+      });
       document.querySelector(".countdown").classList.toggle("night-mode");
       document.querySelector("footer").classList.toggle("night-mode");
+      document.querySelector(".guest-book-container").classList.toggle("night-mode");
     });
 
     // Translation Button
@@ -416,21 +765,44 @@ h1 {
 
     function translateToEnglish() {
       document.querySelector("header h1").innerText = "Rose and Treasure";
-      document.querySelector("header p").innerText = "Join us for our civil wedding!";
-      document.querySelector("h2").innerText = "Event Details";
+      document.querySelector(".section h2").innerText = "Event Details";
       document.querySelector(".rsvp-section h2").innerText = "RSVP";
       document.querySelector(".countdown h3").innerText = "Countdown to the big day";
       document.querySelector(".gallery h2").innerText = "Gallery";
+      document.querySelector("#guestBookSection h2").innerText = "📖 Guest Book";
+      document.getElementById("nameInput").placeholder = "Your name";
+      document.getElementById("messageInput").placeholder = "Write your wishes...";
+      document.querySelector(".guest-submit-btn").innerHTML = '<i class="fas fa-paper-plane"></i> Send';
+      document.querySelector(".guest-view-btn").innerHTML = '<i class="fas fa-book-open"></i> View messages';
+      document.querySelector(".modal-title").innerHTML = '<i class="fas fa-heart"></i> Wishes Messages';
     }
 
     function translateToFrench() {
       document.querySelector("header h1").innerText = "Rose et Trésor";
-      document.querySelector("header p").innerText = "Venez assister à notre mariage civil";
-      document.querySelector("h2").innerText = "Détails de l'événement";
-      document.querySelector(".rsvp-section h2").innerText = "Confirmez votre présence";
+      document.querySelector(".section h2").innerText = "Détails de l'événement";
+      document.querySelector(".rsvp-section h2").innerText = "Confirme ta présence";
       document.querySelector(".countdown h3").innerText = "Compte à rebours de l'heureux jour";
       document.querySelector(".gallery h2").innerText = "Galerie";
+      document.querySelector("#guestBookSection h2").innerText = "📖 Livre d'or";
+      document.getElementById("nameInput").placeholder = "Votre nom";
+      document.getElementById("messageInput").placeholder = "Écrivez votre message de vœux...";
+      document.querySelector(".guest-submit-btn").innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer';
+      document.querySelector(".guest-view-btn").innerHTML = '<i class="fas fa-book-open"></i> Voir les messages';
+      document.querySelector(".modal-title").innerHTML = '<i class="fas fa-heart"></i> Messages de vœux';
     }
+
+    // Activer/désactiver le champ nomAccompagnant
+    document.getElementById('accompagné').addEventListener('change', function() {
+      const accompagnantField = document.getElementById('nomAccompagnant');
+      if (this.value === 'Oui') {
+        accompagnantField.disabled = false;
+        accompagnantField.required = true;
+      } else {
+        accompagnantField.disabled = true;
+        accompagnantField.required = false;
+        accompagnantField.value = '';
+      }
+    });
   </script>
 </body>
 </html>
