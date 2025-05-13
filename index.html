@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -17,6 +18,150 @@
       overflow-x: hidden;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
+    .event-details {
+    background: linear-gradient(135deg, rgba(255, 245, 250, 0.95) 0%, rgba(255, 230, 240, 0.95) 100%);
+    border: 2px solid rgba(199, 21, 133, 0.2);
+  }
+  
+  .details-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .details-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: #c71585;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(to right, #f8b6d2, #d63384);
+    margin: 0 auto;
+    border-radius: 3px;
+  }
+  
+  .details-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .detail-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: 280px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .detail-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  
+  .detail-icon {
+    background: linear-gradient(45deg, #c71585, #e84393);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    color: white;
+    font-size: 1.5rem;
+  }
+  
+  .detail-content h3 {
+    color: #c71585;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .detail-content p {
+    margin: 0.2rem 0;
+    color: #555;
+  }
+  
+  .highlight {
+    color: #d63384 !important;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  .map-toggle {
+    background: none;
+    border: none;
+    color: #c71585;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+  
+  .map-toggle i {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+  }
+  
+  .map-container {
+    margin-top: 1rem;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .map {
+    height: 350px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border: 2px solid rgba(199, 21, 133, 0.2);
+  }
+  
+  .map iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  .map-actions {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .map-link {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+  }
+  
+  .map-link:hover {
+    transform: translateY(-2px);
+  }
+  
+  .map-link i {
+    margin-right: 8px;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 
     html {
       scroll-behavior: smooth;
@@ -128,7 +273,9 @@
       gap: 1rem;
     }
 
-    .rsvp-section input, .rsvp-section select {
+    .rsvp-section input, 
+    .rsvp-section select,
+    .rsvp-section textarea {
       padding: 12px;
       font-size: 1rem;
       border-radius: 10px;
@@ -230,7 +377,6 @@
       transform: scale(1.1);
     }
 
-    /* Styles pour le livre d'or */
     .guest-book-container {
       position: relative;
       background: linear-gradient(135deg, rgba(255, 245, 250, 0.9) 0%, rgba(255, 230, 240, 0.9) 100%);
@@ -301,7 +447,6 @@
       transform: translateY(-2px);
     }
 
-    /* Modal amélioré */
     .guest-book-modal {
       display: none;
       position: fixed;
@@ -424,7 +569,6 @@
       margin-top: 8px;
     }
 
-    /* Cœurs flottants */
     .floating-hearts {
       position: absolute;
       top: 0;
@@ -442,22 +586,159 @@
       font-size: 1.2rem;
     }
 
-    .floating-hearts i:nth-child(1) {
-      top: 10%;
-      left: 20%;
-      animation-delay: 0s;
+    .download-invite {
+      display: none;
+      margin: 20px auto;
+      padding: 14px 25px;
+      background: linear-gradient(45deg, #4CAF50, #2E7D32);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .download-invite:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+    
+    .download-invite i {
+      margin-right: 8px;
+    }
+    
+    .invitation-preview {
+      display: none;
+      max-width: 100%;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      border: 2px solid #f8b6d2;
+    }
+    
+    .preview-container {
+      position: relative;
+      text-align: center;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    
+    .preview-name {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      color: #000;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      width: 80%;
     }
 
-    .floating-hearts i:nth-child(2) {
-      top: 60%;
-      left: 70%;
-      animation-delay: 3s;
+    /* Nouveaux styles pour les sections ajoutées */
+    .form-group {
+      margin-bottom: 1rem;
     }
 
-    .floating-hearts i:nth-child(3) {
-      top: 30%;
-      left: 50%;
-      animation-delay: 6s;
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #c71585;
+    }
+
+    .faq-item {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px dashed #f8b6d2;
+      padding-bottom: 1rem;
+    }
+
+    .faq-question {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #c71585;
+    }
+
+    .faq-answer {
+      display: none;
+      padding-top: 0.5rem;
+      color: #555;
+    }
+
+    .story-timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin: 2rem 0;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .timeline-date {
+      position: absolute;
+      left: -2rem;
+      top: 0;
+      background: #c71585;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .timeline-content {
+      background: rgba(248, 182, 210, 0.1);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border-left: 3px solid #c71585;
+    }
+
+    .story-image {
+  max-width: 300px; /* Taille réduite */
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+    .wedding-party {
+      margin-top: 3rem;
+    }
+
+    .party-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .party-member {
+      text-align: center;
+    }
+
+    .party-member img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #c71585;
+      margin-bottom: 0.5rem;
+    }
+
+    .party-member h4 {
+      margin: 0.5rem 0;
+      color: #c71585;
+    }
+
+    .party-member p {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 0;
     }
 
     @keyframes floatHeart {
@@ -507,14 +788,47 @@
     <button id="translateButton"><i class="fas fa-language"></i></button>
   </div>
 
-  <section class="section">
-    <h2>Détails de l'événement</h2>
-    <p><strong>Date :</strong> 13 juillet 2025 à 10h00</p>
-    <p><strong>Lieu :</strong> Salle de fête SNCC</p>
-    <div class="map">
-      <iframe src="https://www.google.com/maps?q=Salle+de+f%C3%AAte+SNCC&output=embed"></iframe>
+  <section class="section event-details">
+  <div class="details-header">
+    <h2><i class="fas fa-calendar-alt"></i> Détails de l'Événement</h2>
+    <div class="divider"></div>
+  </div>
+  
+  <div class="details-container">
+    <div class="detail-card">
+      <div class="detail-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="detail-content">
+        <h3>Date & Heure</h3>
+        <p>13 Juillet 2025</p>
+        <p class="highlight">10h00</p>
+      </div>
     </div>
-  </section>
+    
+    <div class="detail-card">
+      <div class="detail-icon">
+        <i class="fas fa-map-marker-alt"></i>
+      </div>
+      <div class="detail-content">
+        <h3>Lieu</h3>
+        <p>Les etangs Lubumbashi</p>
+        <button class="map-toggle">Voir sur la carte <i class="fas fa-chevron-down"></i></button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="map-container" style="display: none;">
+    <div class="map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3907.3087035030794!2d27.426615173245526!3d-11.672520488536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19723c68e960f069%3A0xa1c8c6784685b3ed!2sLes%20Etangs%20Lubumbashi!5e0!3m2!1sfr!2scd!4v1747121626335!5m2!1sfr!2scd" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="map-actions">
+      <a href="https://maps.app.goo.gl/D47QXLZBNqvbZthc6" target="_blank" class="map-link">
+        <i class="fas fa-directions"></i> Itinéraire
+      </a>
+    </div>
+  </div>
+</section>
 
   <section class="section dresscode-container">
     <h2>🎨 Dress Code mariage civil (Obligatoire)</h2>
@@ -534,24 +848,57 @@
 
   <section class="section rsvp-section">
     <h2>Confirme ta présence</h2>
-    <form action="https://formspree.io/f/mzzrdnpq" method="POST">
-      <input type="text" name="nom" required placeholder="Ton nom">
+    <form id="rsvpForm" action="https://formspree.io/f/mzzrdnpq" method="POST">
+      <input type="text" id="guestName" name="nom" required placeholder="Ton nom complet">
   
-      <select name="presence" required>
+      <select id="guestPresence" name="presence" required>
         <option value="">Seras-tu présent(e) ?</option>
         <option value="Oui">Oui, je serai là !</option>
         <option value="Non">Non, malheureusement</option>
       </select>
   
-      <select name="accompagné" id="accompagné" required>
+      <select id="guestAccompanied" name="accompagné" required>
         <option value="">Viens-tu accompagné(e) ?</option>
         <option value="Oui">Oui, en couple</option>
         <option value="Non">Non, je viens seul(e)</option>
       </select>
   
-      <input type="text" name="nomAccompagnant" id="nomAccompagnant" placeholder="Nom de l'accompagnant" disabled>
+      <input type="text" id="guestAccompagnant" name="nomAccompagnant" placeholder="Nom de l'accompagnant" disabled>
   
-      <button type="submit">Envoyer</button>
+      <div class="form-group">
+        <label for="foodRestrictions">Restrictions alimentaires (allergies, régimes spécifiques)</label>
+        <textarea id="foodRestrictions" name="restrictions" rows="2" placeholder="Ex: Vegan, allergie aux arachides..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="songRequest">Demande spéciale de chanson (pour la piste de danse!)</label>
+        <input type="text" id="songRequest" name="chanson" placeholder="Titre et artiste de la chanson">
+      </div>
+      
+      <div class="form-group">
+        <label for="transportNeeds">Boisson Specifique ?</label>
+        <select id="transportNeeds" name="trasport">
+          <option value="">-- Sélectionnez --</option>
+          <option value="Oui">Coca,Fanta,Djino,Oasis,Tropical,Vitalo,Ceres</option>
+          <option value="Oui">Eau</option>
+          <option value="Oui">33 export</option>
+          <option value="Oui">Simba</option>
+          <option value="Oui">Doppel,Legend</option>
+          <option value="Oui">Primus,Castel</option>
+          <option value="Oui">Chuis</option>
+        </select>
+      </div>
+  
+      <button type="submit" id="submitBtn">Confirmer</button>
+      
+      <button type="button" id="downloadInvite" class="download-invite">
+        <i class="fas fa-download"></i> Télécharger mon invitation
+      </button>
+      
+      <div class="preview-container" id="invitationPreviewContainer" style="display: none;">
+        <img id="invitationPreview" class="invitation-preview" alt="Aperçu de votre invitation">
+        <div class="preview-name" id="previewName"></div>
+      </div>
     </form>
   </section>
 
@@ -563,6 +910,98 @@
       <img src="poser.jpg" alt="Photo 3">
       <img src="Smile.jpg" alt="Photo 4">
       <img src="cool.jpg" alt="Photo 5">
+    </div>
+  </section>
+
+  <section class="section our-story">
+    <h2>💖 Notre Histoire</h2>
+    
+    <div class="story-timeline">
+      <div class="timeline-item">
+        <div class="timeline-date"> Fin 2023</div>
+        <div class="timeline-content">
+          <h3>Première Rencontre</h3>
+          <p>Nous nous sommes rencontré sur WhatsApp,tresor avait amenagé dans notre territoire de predication et c'etait ors d'une reunion que nous nous somme vu,mais c'etait pas le coup de foudre dés la premiere rencontre...c'est venu progressivement !</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-date">2024</div>
+        <div class="timeline-content">
+          <h3>Frequentation</h3>
+          <p>Nous apprenons à nous connaitre ,à faire des sorties chapperoner et à renforcer notre relation.</p>
+        </div>
+      </div>
+      
+     <div class="timeline-item">
+  <div class="timeline-date">2025</div>
+  <div class="timeline-content">
+    <h3>La Demande</h3>
+    <p>Surprise Surprise...je ne savais pas qu'a l'endroit ou je me dirigeais mon homme m'attendais avec une bague en argent,pour officialiser son engagement à faire de moi la femme de sa vie !</p>
+    <img src="dema.jpg" alt="Le moment de la demande" class="story-image" style="max-width: 250px; height: auto;">
+  </div>
+</div>
+    
+    <div class="wedding-party">
+      <h3>Notre Cortège d'Honneur</h3>
+      
+      <div class="party-grid">
+        <div class="party-member">
+          <img src="Asiz.jpg" alt="Témoin Teddy">
+          <h4>Couple Azis</h4>
+          <p>Soeur et Beau-frere de la mariée</p>
+        </div>
+        
+        <div class="party-member">
+          <img src="" alt="Témoin Lilian">
+          <h4>Couple dandy</h4>
+          <p>Grand-frere et belle-soeur de la mariée</p>
+        </div>
+        
+        <div class="party-member">
+          <img src="Beya.jpg" alt="Fleuriste">
+          <h4>Couple Barack</h4>
+          <p>Soeur et Beau-frere de la mariée</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section faq-section">
+    <h2>❓ Questions Fréquentes</h2>
+    
+    <div class="faq-item">
+      <h3 class="faq-question">Quelle est la tenue appropriée ? <i class="fas fa-chevron-down"></i></h3>
+      <div class="faq-answer">
+        <p>Nous appliquons un dress code strict : rose fushia pour les femmes et mauve pâle pour les hommes. Merci de respecter ces couleurs pour des photos harmonieuses !</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <h3 class="faq-question">Où se garer près du lieu de réception ? <i class="fas fa-chevron-down"></i></h3>
+      <div class="faq-answer">
+        <p>Un parking gratuit est disponible derrière la salle SNCC. Nous avons réservé 50 places pour nos invités.</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <h3 class="faq-question">Pouvons-nous apporter des enfants ? <i class="fas fa-chevron-down"></i></h3>
+      <div class="faq-answer">
+        <p>Nous adorons les enfants mais cette célébration sera réservée aux adultes. Merci de votre compréhension.</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <h3 class="faq-question">Quel est le programme de la journée ? <i class="fas fa-chevron-down"></i></h3>
+      <div class="faq-answer">
+        <ul>
+          <li>10h00 : Cérémonie civile</li>
+          <li>12h00 : Cocktail et photos</li>
+          <li>14h00 : Déjeuner et discours</li>
+          <li>16h00 : Ouverture du bal</li>
+          <li>Minuit : Fin des festivités</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -610,6 +1049,23 @@
   </footer>
 
   <script>
+    // VOTRE IMAGE CANVA EN BASE64 - REMPLACEZ CE TEXTE PAR VOTRE CODE BASE64
+    const CANVA_INVITATION_BASE64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ..."; // Remplacer par votre vrai code
+    
+    document.querySelector('.map-toggle').addEventListener('click', function() {
+    const mapContainer = document.querySelector('.map-container');
+    const icon = this.querySelector('i');
+    
+    if(mapContainer.style.display === 'none') {
+      mapContainer.style.display = 'block';
+      icon.classList.remove('fa-chevron-down');
+      icon.classList.add('fa-chevron-up');
+    } else {
+      mapContainer.style.display = 'none';
+      icon.classList.remove('fa-chevron-up');
+      icon.classList.add('fa-chevron-down');
+    }
+  });
     // Animation de défilement des sections
     function checkVisibility() {
       const sections = document.querySelectorAll('.section');
@@ -693,6 +1149,9 @@
       messageCard.appendChild(textP);
       messageCard.appendChild(dateSpan);
       
+      // Sauvegarder dans le localStorage
+      saveMessageToLocalStorage(name, message);
+      
       document.getElementById('messagesList').prepend(messageCard);
       
       // Animation de confirmation
@@ -710,9 +1169,57 @@
       document.getElementById('messageInput').value = '';
     }
 
+    function saveMessageToLocalStorage(name, message) {
+      const messages = JSON.parse(localStorage.getItem('guestBookMessages') || '[]');
+      messages.push({
+        name,
+        message,
+        date: new Date().toISOString()
+      });
+      localStorage.setItem('guestBookMessages', JSON.stringify(messages));
+    }
+
+    function loadMessagesFromLocalStorage() {
+      const messages = JSON.parse(localStorage.getItem('guestBookMessages') || '[]');
+      const container = document.getElementById('messagesList');
+      container.innerHTML = '';
+      
+      messages.forEach(msg => {
+        const messageCard = document.createElement('div');
+        messageCard.className = 'message-card';
+        
+        const authorSpan = document.createElement('div');
+        authorSpan.className = 'message-author';
+        authorSpan.innerHTML = `<i class="fas fa-user"></i> ${msg.name}`;
+        
+        const textP = document.createElement('div');
+        textP.className = 'message-text';
+        textP.textContent = msg.message;
+        
+        const dateSpan = document.createElement('div');
+        dateSpan.className = 'message-date';
+        dateSpan.textContent = new Date(msg.date).toLocaleString('fr-FR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        messageCard.appendChild(authorSpan);
+        messageCard.appendChild(textP);
+        messageCard.appendChild(dateSpan);
+        
+        container.appendChild(messageCard);
+      });
+    }
+
     function openModal() {
       const modal = document.getElementById('modal');
       modal.style.display = 'flex';
+      
+      // Charger les messages depuis le localStorage
+      loadMessagesFromLocalStorage();
       
       // Petite animation quand le modal s'ouvre
       const modalContent = modal.querySelector('.modal-content');
@@ -736,6 +1243,172 @@
         modal.style.display = 'none';
       }, 300);
     }
+
+    // Gestion du formulaire RSVP avec Formspree + téléchargement
+    document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      const submitBtn = document.getElementById('submitBtn');
+      const guestName = document.getElementById('guestName').value.trim();
+      const accompaniantName = document.getElementById('guestAccompagnant').value.trim();
+      
+      // Désactiver le bouton pendant l'envoi
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+      
+      try {
+        // Envoi à Formspree
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          // Générer et télécharger l'invitation
+          generateInvitationPDF(guestName, accompaniantName);
+          
+          // Afficher l'aperçu
+          generateInvitationPreview({
+            name: guestName,
+            accompanied: document.getElementById('guestAccompanied').value,
+            accompaniantName: accompaniantName
+          });
+          
+          // Afficher le bouton de téléchargement pour un éventuel nouveau téléchargement
+          document.getElementById('downloadInvite').style.display = 'block';
+          document.getElementById('invitationPreviewContainer').style.display = 'block';
+          
+          // Message de succès
+          alert('Merci pour votre confirmation ! Votre invitation a été téléchargée.');
+        } else {
+          throw new Error('Erreur lors de l\'envoi');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Un problème est survenu lors de l\'envoi. Veuillez réessayer.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Confirmer';
+      }
+    });
+    
+    // Générateur d'aperçu d'invitation
+    function generateInvitationPreview(guestData) {
+      const previewContainer = document.getElementById('invitationPreviewContainer');
+      const previewImg = document.getElementById('invitationPreview');
+      
+      // Réinitialiser le conteneur
+      previewContainer.innerHTML = '<img id="invitationPreview" class="invitation-preview" alt="Aperçu de votre invitation">';
+      const newPreviewImg = previewContainer.querySelector('#invitationPreview');
+      newPreviewImg.src = CANVA_INVITATION_BASE64;
+      
+      // Créer le div pour le nom principal
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'preview-name';
+      nameDiv.style.position = 'absolute';
+      nameDiv.style.top = '37%';
+      nameDiv.style.left = '50%';
+      nameDiv.style.transform = 'translate(-30%, -50%)';
+      nameDiv.style.fontSize = '16px';
+      nameDiv.style.color = '#333333';
+      nameDiv.style.fontFamily = 'Helvetica, sans-serif';
+      nameDiv.textContent = guestData.name;
+      
+      previewContainer.appendChild(nameDiv);
+
+      // Si accompagné, ajouter le deuxième nom
+      if (guestData.accompanied === 'Oui' && guestData.accompaniantName) {
+        const accompagnantDiv = document.createElement('div');
+        accompagnantDiv.className = 'preview-name';
+        accompagnantDiv.style.position = 'absolute';
+        accompagnantDiv.style.top = '40%';
+        accompagnantDiv.style.left = '50%';
+        accompagnantDiv.style.transform = 'translate(-30%, -50%)';
+        accompagnantDiv.style.fontSize = '16px';
+        accompagnantDiv.style.color = '#333333';
+        accompagnantDiv.textContent = `& ${guestData.accompaniantName}`;
+        
+        previewContainer.appendChild(accompagnantDiv);
+      }
+      
+      previewContainer.style.display = 'block';
+    }
+    
+    // Générateur d'invitation PDF
+    function generateInvitationPDF(name, accompaniantName = null) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a5'
+      });
+
+      // Ajouter l'image Canva comme fond
+      doc.addImage(CANVA_INVITATION_BASE64, 'JPEG', 0, 0, 148, 210);
+
+      // Configuration du texte pour le nom
+      doc.setFontSize(12);
+      doc.setTextColor(51, 51, 51);
+      doc.setFont('Helvetica', 'normal');
+
+      // Position exacte du nom (ajuster selon votre design)
+      const nameX = 65;
+      const nameY = 62;
+
+      // Écrire le nom principal
+      doc.text(name, nameX, nameY);
+
+      // Si accompagné, ajouter le deuxième nom
+      if(accompaniantName) {
+        doc.text(`& ${accompaniantName}`, nameX, nameY + 6);
+      }
+
+      // Sauvegarder le PDF
+      doc.save(`Invitation_${name.replace(' ', '_')}.pdf`);
+    }
+    
+    // Téléchargement manuel de l'invitation
+    document.getElementById('downloadInvite').addEventListener('click', function() {
+      const guestName = document.getElementById('guestName').value.trim();
+      const accompaniantName = document.getElementById('guestAccompagnant').value.trim();
+      generateInvitationPDF(guestName, accompaniantName);
+    });
+
+    // Gestion du champ accompagnant
+    document.getElementById('guestAccompanied').addEventListener('change', function() {
+      const accompagnantField = document.getElementById('guestAccompagnant');
+      if (this.value === 'Oui') {
+        accompagnantField.disabled = false;
+        accompagnantField.required = true;
+      } else {
+        accompagnantField.disabled = true;
+        accompagnantField.required = false;
+        accompagnantField.value = '';
+      }
+    });
+
+    // FAQ interactif
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        const icon = question.querySelector('i');
+        
+        if(answer.style.display === 'block') {
+          answer.style.display = 'none';
+          icon.classList.remove('fa-chevron-up');
+          icon.classList.add('fa-chevron-down');
+        } else {
+          answer.style.display = 'block';
+          icon.classList.remove('fa-chevron-down');
+          icon.classList.add('fa-chevron-up');
+        }
+      });
+    });
 
     // Night Mode Toggle
     const toggleNightMode = document.getElementById("toggleNightMode");
@@ -770,11 +1443,18 @@
       document.querySelector(".countdown h3").innerText = "Countdown to the big day";
       document.querySelector(".gallery h2").innerText = "Gallery";
       document.querySelector("#guestBookSection h2").innerText = "📖 Guest Book";
+      document.querySelector(".our-story h2").innerText = "💖 Our Story";
+      document.querySelector(".wedding-party h3").innerText = "Our Wedding Party";
+      document.querySelector(".faq-section h2").innerText = "❓ Frequently Asked Questions";
       document.getElementById("nameInput").placeholder = "Your name";
       document.getElementById("messageInput").placeholder = "Write your wishes...";
+      document.getElementById("guestName").placeholder = "Your full name";
+      document.getElementById("foodRestrictions").placeholder = "Ex: Vegan, peanut allergy...";
+      document.getElementById("songRequest").placeholder = "Song title and artist";
       document.querySelector(".guest-submit-btn").innerHTML = '<i class="fas fa-paper-plane"></i> Send';
       document.querySelector(".guest-view-btn").innerHTML = '<i class="fas fa-book-open"></i> View messages';
       document.querySelector(".modal-title").innerHTML = '<i class="fas fa-heart"></i> Wishes Messages';
+      document.getElementById("downloadInvite").innerHTML = '<i class="fas fa-download"></i> Download my invitation';
     }
 
     function translateToFrench() {
@@ -784,25 +1464,19 @@
       document.querySelector(".countdown h3").innerText = "Compte à rebours de l'heureux jour";
       document.querySelector(".gallery h2").innerText = "Galerie";
       document.querySelector("#guestBookSection h2").innerText = "📖 Livre d'or";
+      document.querySelector(".our-story h2").innerText = "💖 Notre Histoire";
+      document.querySelector(".wedding-party h3").innerText = "Notre Cortège d'Honneur";
+      document.querySelector(".faq-section h2").innerText = "❓ Questions Fréquentes";
       document.getElementById("nameInput").placeholder = "Votre nom";
       document.getElementById("messageInput").placeholder = "Écrivez votre message de vœux...";
+      document.getElementById("guestName").placeholder = "Ton nom complet";
+      document.getElementById("foodRestrictions").placeholder = "Ex: Vegan, allergie aux arachides...";
+      document.getElementById("songRequest").placeholder = "Titre et artiste de la chanson";
       document.querySelector(".guest-submit-btn").innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer';
       document.querySelector(".guest-view-btn").innerHTML = '<i class="fas fa-book-open"></i> Voir les messages';
       document.querySelector(".modal-title").innerHTML = '<i class="fas fa-heart"></i> Messages de vœux';
+      document.getElementById("downloadInvite").innerHTML = '<i class="fas fa-download"></i> Télécharger mon invitation';
     }
-
-    // Activer/désactiver le champ nomAccompagnant
-    document.getElementById('accompagné').addEventListener('change', function() {
-      const accompagnantField = document.getElementById('nomAccompagnant');
-      if (this.value === 'Oui') {
-        accompagnantField.disabled = false;
-        accompagnantField.required = true;
-      } else {
-        accompagnantField.disabled = true;
-        accompagnantField.required = false;
-        accompagnantField.value = '';
-      }
-    });
   </script>
 </body>
 </html>
